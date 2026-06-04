@@ -21,6 +21,15 @@ app.get("/add",(req,resp)=>{
 app.get("/update",(req,resp)=>{
    resp.render("update")
 })
+app.post("/update",(req,resp)=>{
+   resp.redirect("/")
+})
+ 
+app.post("/add",(req,resp)=>{
+   resp.redirect("/")
+})
+
+
 const port = process.env.PORT;
 
 app.listen(port,()=>{
