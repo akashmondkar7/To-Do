@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { MongoClient } from 'mongodb';
-import { url } from 'inspector';
 
 dotenv.config();
 
@@ -20,6 +19,13 @@ const url ="mongodb://localhost:27017"
 const client= new MongoClient(url)
 
 
+const connection =async()=>{
+    const connect= await client.connect();
+    return connect.db(dbName)
+}
+
+app.use(express.urlencoded({extended:false}));
+
 app.get("/",(req,resp)=>{
    resp.render("list")
 })
@@ -35,8 +41,16 @@ app.post("/update",(req,resp)=>{
    resp.redirect("/")
 })
  
-app.post("/add",(req,resp)=>{
-   resp.redirect("/")
+app.post("/add",async (req,resp)=>{
+   const db = await connection();
+   const collection =db.collection(collectionName);
+   const result= collection.insertOne(req.body)
+   if(result){
+      resp.redirect("/")
+   }else{
+      resp.redirect("/")
+   }
+   
 })
 
 
