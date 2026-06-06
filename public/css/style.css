@@ -124,3 +124,6 @@ hr{
     border-radius: 5px;
  }
 
+  .delete-item:hover{
+   background-color: red;
+  }

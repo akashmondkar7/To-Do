@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 dotenv.config();
 
@@ -51,6 +51,21 @@ app.post("/add", async (req, resp) => {
     resp.redirect("/");
   } else {
     resp.redirect("/");
+  }
+});
+
+app.post("/delete/:id", async (req, resp) => {
+  const db = await connection();
+  const collection = db.collection(collectionName);
+
+  const result = await collection.deleteOne({
+    _id: new ObjectId(req.params.id)
+  });
+
+  if (result.deletedCount > 0) {
+    resp.redirect("/");
+  } else {
+    resp.send("Some error");
   }
 });
 
