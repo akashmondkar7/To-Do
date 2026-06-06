@@ -1,61 +1,61 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import path from 'path';
-import { MongoClient } from 'mongodb';
+import express from "express";
+import dotenv from "dotenv";
+import path from "path";
+import { MongoClient } from "mongodb";
 
 dotenv.config();
 
 const app = express();
-const publicPath= path.resolve('public')
+const publicPath = path.resolve("public");
 
 app.use(express.static(publicPath));
-app.set("view engine","ejs")
+app.set("view engine", "ejs");
 
+const dbName = "node-project";
 
-const dbName="node-project";
+const collectionName = "ToDoList";
+const url = "mongodb://localhost:27017";
+const client = new MongoClient(url);
 
-const collectionName="ToDoList";
-const url ="mongodb://localhost:27017"
-const client= new MongoClient(url)
+const connection = async () => {
+  const connect = await client.connect();
+  return connect.db(dbName);
+};
 
+app.use(express.urlencoded({ extended: false }));
 
-const connection =async()=>{
-    const connect= await client.connect();
-    return connect.db(dbName)
-}
+app.get("/", async (req, resp) => {
+  const db = await connection();
+  const collection = db.collection(collectionName);
+  const result = await collection.find().toArray();
 
-app.use(express.urlencoded({extended:false}));
+  resp.render("list",{result});
+});
 
-app.get("/",(req,resp)=>{
-   resp.render("list")
-})
+app.get("/add", (req, resp) => {
+  resp.render("add");
+});
 
-app.get("/add",(req,resp)=>{
-   resp.render("add")
-})
+app.get("/update", (req, resp) => {
+  resp.render("update");
+});
+app.post("/update", (req, resp) => {
+  resp.redirect("/");
+});
 
-app.get("/update",(req,resp)=>{
-   resp.render("update")
-})
-app.post("/update",(req,resp)=>{
-   resp.redirect("/")
-})
- 
-app.post("/add",async (req,resp)=>{
-   const db = await connection();
-   const collection =db.collection(collectionName);
-   const result= collection.insertOne(req.body)
-   if(result){
-      resp.redirect("/")
-   }else{
-      resp.redirect("/")
-   }
-   
-})
-
+app.post("/add", async (req, resp) => {
+  const db = await connection();
+  const collection = db.collection(collectionName);
+  const result = collection.insertOne(req.body);
+  if (result) {
+    resp.redirect("/");
+  } else {
+    resp.redirect("/");
+  }
+});
 
 const port = process.env.PORT;
 
-app.listen(port,()=>{
-    console.log(`Server Running on ${port}`)
-})
+app.listen(port, () => {
+  console.log(`Server Running on ${port}`);
+});
