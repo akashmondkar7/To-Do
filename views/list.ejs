@@ -11,12 +11,17 @@
 
     <div class="container">
     <h1>Task List Page</h1>
-    <ul>
+    <ul class="task-list">
         <% for(let task=0 ; task<result.length ; task++) {%>
-            <li>
-            <div>
+            <li class="task-item">
+            <div class="task-title">
              
-               <%= result[task].name %>
+               <%= result[task].title %>
+
+            </div>
+            <div class="task-description">
+             
+               <%= result[task].description %>
 
             </div>
         </li>
