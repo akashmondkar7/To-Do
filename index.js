@@ -92,6 +92,20 @@ app.post("/update/:id", async (req, resp) => {
   }
 });
 
+app.post("/multi-delete", async (req, resp) => {
+  const db = await connection();
+  const collection = db.collection(collectionName);
+  const filter={_id:new ObjectId(req.params.id)}
+  const updateData={$set:{title:req.body.title,description:req.body.description}}
+  const result = await collection.updateOne(filter,updateData);
+
+  if (result) {
+    resp.redirect("/");
+  } else {
+    resp.send("Some error");
+  }
+});
+
 
 const port = process.env.PORT;
 

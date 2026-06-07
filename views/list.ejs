@@ -11,8 +11,8 @@
 
     <div class="container">
     <h1>Task List Page</h1>
-    <form action="/delete-selected" method="POST">
-        <button class="delete-item">Delete Selected Tasks</button>
+    <form action="/multi-delete" method="POST" ">
+        <button class="delete-item" style="margin-bottom: 10px">Delete Selected Tasks</button>
 
     <ul class="task-list">
         <% for(let task=0 ; task<result.length ; task++) {%>
