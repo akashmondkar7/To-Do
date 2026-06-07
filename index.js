@@ -95,11 +95,17 @@ app.post("/update/:id", async (req, resp) => {
 app.post("/multi-delete", async (req, resp) => {
   const db = await connection();
   const collection = db.collection(collectionName);
-  const filter={_id:new ObjectId(req.params.id)}
-  const updateData={$set:{title:req.body.title,description:req.body.description}}
-  const result = await collection.updateOne(filter,updateData);
+   let selectedTask = undefined;
+  // support multiple checkbox name variants (selectedTask, selectTask, selectTask[])
+  let ids = req.body.selectedTask || req.body.selectTask || req.body['selectTask[]'];
+  if (!ids) {
+    return resp.redirect('/');
+  }
+  if (!Array.isArray(ids)) ids = [ids];
+  const objectIds = ids.map((id) => new ObjectId(id));
 
-  if (result) {
+  const result = await collection.deleteMany({ _id: { $in: objectIds } });
+  if (result && result.deletedCount >= 0) {
     resp.redirect("/");
   } else {
     resp.send("Some error");
