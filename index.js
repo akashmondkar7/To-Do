@@ -68,6 +68,21 @@ app.post("/delete/:id", async (req, resp) => {
     resp.send("Some error");
   }
 });
+app.post("/update/:id", async (req, resp) => {
+  const db = await connection();
+  const collection = db.collection(collectionName);
+
+  const result = await collection.findOne({
+    _id: new ObjectId(req.params.id)
+  });
+
+  if (result) {
+    resp.render("update");
+  } else {
+    resp.send("Some error");
+  }
+});
+
 
 const port = process.env.PORT;
 

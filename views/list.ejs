@@ -27,6 +27,9 @@
                         <form action="/delete/<%= result[task]._id %>" method="POST" style="display:inline">
                             <button type="submit" class="delete-item">Delete</button>
                         </form>
+                         <form action="/update/<%= result[task]._id %>" method="POST" style="display:inline">
+                            <button type="submit" class="update-item">Update</button>
+                        </form>
         </li>
             <%}%>
     </ul>
