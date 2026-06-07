@@ -83,11 +83,10 @@ hr{
  }
 
  .task-list{
-    list-style: none;
-    padding: 0;
-    max-width: 600;
-    margin: auto;
-  
+     list-style: none;
+     padding: 0;
+     max-width: 600px;
+     margin: auto;
  }
 
  .task-item{

@@ -11,28 +11,26 @@
 
     <div class="container">
     <h1>Task List Page</h1>
+    <form action="/delete-selected" method="POST">
+        <button class="delete-item">Delete Selected Tasks</button>
+
     <ul class="task-list">
         <% for(let task=0 ; task<result.length ; task++) {%>
             <li class="task-item">
             <div class="task-title">
-             
                <%= result[task].title %>
-
             </div>
             <div class="task-description">
-             
                <%= result[task].description %>
-
             </div>
-                        <form action="/delete/<%= result[task]._id %>" method="POST" style="display:inline">
-                            <button type="submit" class="delete-item">Delete</button>
-                        </form>
-                         <form action="/update/<%= result[task]._id %>" method="GET" style="display:inline">
-                            <button type="submit" class="update-item">Update</button>
-                        </form>
+             <input type="checkbox" name="selectTask[]" value="<%= result[task]._id%>">
+             <button formaction="/delete/<%= result[task]._id %>" formmethod="post" class="delete-item">Delete</button>
+             <button formaction="/update/<%= result[task]._id %>" formmethod="get" class="update-item">Update</button>
         </li>
             <%}%>
     </ul>
+    </form>
+    
     </div>
     
 </body>
