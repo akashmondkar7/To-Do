@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { MongoClient, ObjectId } from "mongodb";
+import { title } from "process";
 
 dotenv.config();
 
@@ -36,17 +37,12 @@ app.get("/add", (req, resp) => {
   resp.render("add");
 });
 
-app.get("/update", (req, resp) => {
-  resp.render("update");
-});
-app.post("/update", (req, resp) => {
-  resp.redirect("/");
-});
+// Render update page for a specific task (id passed as URL param)
 
 app.post("/add", async (req, resp) => {
   const db = await connection();
   const collection = db.collection(collectionName);
-  const result = collection.insertOne(req.body);
+  const result = await collection.insertOne(req.body);
   if (result) {
     resp.redirect("/");
   } else {
@@ -68,7 +64,7 @@ app.post("/delete/:id", async (req, resp) => {
     resp.send("Some error");
   }
 });
-app.post("/update/:id", async (req, resp) => {
+app.get("/update/:id", async (req, resp) => {
   const db = await connection();
   const collection = db.collection(collectionName);
 
@@ -78,6 +74,19 @@ app.post("/update/:id", async (req, resp) => {
 
   if (result) {
     resp.render("update",{result});
+  } else {
+    resp.send("Some error");
+  }
+});
+app.post("/update/:id", async (req, resp) => {
+  const db = await connection();
+  const collection = db.collection(collectionName);
+  const filter={_id:new ObjectId(req.params.id)}
+  const updateData={$set:{title:req.body.title,description:req.body.description}}
+  const result = await collection.updateOne(filter,updateData);
+
+  if (result) {
+    resp.redirect("/");
   } else {
     resp.send("Some error");
   }
