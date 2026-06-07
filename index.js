@@ -77,7 +77,7 @@ app.post("/update/:id", async (req, resp) => {
   });
 
   if (result) {
-    resp.render("update");
+    resp.render("update",{result});
   } else {
     resp.send("Some error");
   }
